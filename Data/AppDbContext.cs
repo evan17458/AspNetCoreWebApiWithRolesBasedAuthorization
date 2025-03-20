@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApiWithRoleAuthentication.Models;
 
+using Newtonsoft.Json;
+using System.Reflection;
+
 namespace WebApiWithRoleAuthentication.Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
@@ -11,18 +14,20 @@ namespace WebApiWithRoleAuthentication.Data
         {
         }
         public DbSet<TouristRoute> TouristRoutes { get; set; }
+        public DbSet<TouristRoutePicture> TouristRoutePictures { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TouristRoute>().HasData(new TouristRoute()
+
+            var touristRouteJsonData = File.ReadAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"/Data/touristRoutesMockData.json");
+            IList<TouristRoute>? touristRoutes = JsonConvert.DeserializeObject<IList<TouristRoute>>(touristRouteJsonData);
+            if (touristRoutes != null)
             {
-                Id = Guid.NewGuid(),
-                Title = "ceshititle",
-                Description = "shuoming",
-                OriginalPrice = 0,
-                CreateTime = DateTime.UtcNow
-            });
-
-
+                modelBuilder.Entity<TouristRoute>().HasData(touristRoutes);
+            }
+            var touristRoutePictureJsonData = File.ReadAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"/Data/touristRoutePicturesMockData.json");
+            IList<TouristRoutePicture> touristRoutePictures = JsonConvert.DeserializeObject<IList<TouristRoutePicture>>(touristRoutePictureJsonData) ?? [];
+            modelBuilder.Entity<TouristRoutePicture>().HasData(touristRoutePictures);
             base.OnModelCreating(modelBuilder);
         }
     }
