@@ -10,5 +10,19 @@ namespace WebApiWithRoleAuthentication.Data
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TouristRoute>().HasData(new TouristRoute()
+            {
+                Id = Guid.NewGuid(),
+                Title = "ceshititle",
+                Description = "shuoming",
+                OriginalPrice = 0,
+                CreateTime = DateTime.UtcNow
+            });
+
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
