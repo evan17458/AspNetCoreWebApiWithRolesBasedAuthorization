@@ -10,6 +10,7 @@ namespace WebApiWithRoleAuthentication.Data
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
+        public DbSet<TouristRoute> TouristRoutes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TouristRoute>().HasData(new TouristRoute()

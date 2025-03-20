@@ -272,13 +272,13 @@ namespace WebApiWithRoleAuthentication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TouristRoute");
+                    b.ToTable("TouristRoutes");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0d7cd7c1-e1b2-496d-8fe0-85ce4374c9ef"),
-                            CreateTime = new DateTime(2025, 3, 20, 5, 57, 34, 633, DateTimeKind.Utc).AddTicks(9583),
+                            Id = new Guid("4721def4-3b65-4f11-9ccb-abd658a02ca4"),
+                            CreateTime = new DateTime(2025, 3, 20, 6, 53, 18, 388, DateTimeKind.Utc).AddTicks(5753),
                             Description = "shuoming",
                             OriginalPrice = 0m,
                             Title = "ceshititle"
