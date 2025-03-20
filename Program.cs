@@ -19,6 +19,15 @@ builder.Services.AddScoped<ITouristRouteRepository, TouristRouteRepository>();
 builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("Default")!));
 
+
+
+
+// 扫描 profile 文件
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 6;
