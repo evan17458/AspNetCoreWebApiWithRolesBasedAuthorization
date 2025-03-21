@@ -12,6 +12,8 @@ namespace WebApiWithRoleAuthentication.Services
         TouristRoutePicture? GetPicture(int pictureId);
 
         void AddTouristRoute(TouristRoute touristRoute);
+
+         void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
         bool Save();
     }
 }
