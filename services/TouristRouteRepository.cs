@@ -8,36 +8,29 @@ namespace WebApiWithRoleAuthentication.Services
     {
         private readonly AppDbContext _context;
 
-        public TouristRouteRepository(AppDbContext context)
+        public TouristRouteRepository(AppDbContext appDbContext)
         {
-            _context = context;
+            _context = appDbContext;
         }
 
-        public TouristRoute? GetTouristRoute(Guid touristRouteId)
+        public async Task<TouristRoute?> GetTouristRouteAsync(Guid touristRouteId)
         {
-            return _context.TouristRoutes.FirstOrDefault(n => n.Id == touristRouteId);
+            return await _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefaultAsync(n => n.Id == touristRouteId);
         }
 
-        public IEnumerable<TouristRoute> GetTouristRoutes()
-        {
-
-            // include vs join
-            return _context.TouristRoutes.Include(t => t.TouristRoutePictures);
-        }
-
-        public IEnumerable<TouristRoute> GetTouristRoutes(
-        string? keyword,
-        string? ratingOperator,
-        int? ratingValue
+        public async Task<IEnumerable<TouristRoute?>> GetTouristRoutesAsync(
+            string? keyword,
+            string? ratingOperator,
+            int? ratingValue
         )
         {
             IQueryable<TouristRoute> result = _context
-                            .TouristRoutes
-                            .Include(t => t.TouristRoutePictures);
+                .TouristRoutes
+                .Include(t => t.TouristRoutePictures);
             if (!string.IsNullOrWhiteSpace(keyword))
             {
                 keyword = keyword.Trim();
-                result = result.Where(t => (t.Title ?? "").Contains(keyword));
+                result = result.Where(t => (t.Title ?? string.Empty).Contains(keyword));
             }
             if (ratingValue >= 0)
             {
@@ -49,21 +42,28 @@ namespace WebApiWithRoleAuthentication.Services
                 };
             }
             // include vs join
-            return result.ToList();
-        }
-        public bool TouristRouteExists(Guid touristRouteId)
-        {
-            return _context.TouristRoutes.Any(t => t.Id == touristRouteId);
+            return await result.ToListAsync();
         }
 
-        public IEnumerable<TouristRoutePicture> GetPicturesByTouristRouteId(Guid touristRouteId)
+        public async Task<bool> TouristRouteExistsAsync(Guid touristRouteId)
         {
-            return _context.TouristRoutePictures
-                .Where(p => p.TouristRouteId == touristRouteId).ToList();
+            return await _context.TouristRoutes.AnyAsync(t => t.Id == touristRouteId);
         }
-        public TouristRoutePicture? GetPicture(int pictureId)
+
+        public async Task<IEnumerable<TouristRoutePicture>> GetPicturesByTouristRouteIdAsync(Guid touristRouteId)
         {
-            return _context.TouristRoutePictures.Where(p => p.Id == pictureId).FirstOrDefault();
+            return await _context.TouristRoutePictures
+                .Where(p => p.TouristRouteId == touristRouteId).ToListAsync();
+        }
+
+        public async Task<TouristRoutePicture?> GetPictureAsync(int pictureId)
+        {
+            return await _context.TouristRoutePictures.Where(p => p.Id == pictureId).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<TouristRoute>> GetTouristRoutesByIDListAsync(IEnumerable<Guid> ids)
+        {
+            return await _context.TouristRoutes.Where(t => ids.Contains(t.Id)).ToListAsync();
         }
 
         public void AddTouristRoute(TouristRoute touristRoute)
@@ -75,6 +75,7 @@ namespace WebApiWithRoleAuthentication.Services
             _context.TouristRoutes.Add(touristRoute);
             //_context.SaveChanges();
         }
+
         public void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture)
         {
             if (touristRouteId == Guid.Empty)
@@ -88,10 +89,9 @@ namespace WebApiWithRoleAuthentication.Services
             touristRoutePicture.TouristRouteId = touristRouteId;
             _context.TouristRoutePictures.Add(touristRoutePicture);
         }
-        public bool Save()
+        public async Task<bool> SaveAsync()
         {
-            return (_context.SaveChanges() >= 0);
+            return await _context.SaveChangesAsync() >= 0;
         }
-
     }
 }

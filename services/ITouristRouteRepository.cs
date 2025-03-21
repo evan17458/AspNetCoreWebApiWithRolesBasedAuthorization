@@ -4,16 +4,15 @@ namespace WebApiWithRoleAuthentication.Services
 {
     public interface ITouristRouteRepository
     {
-        IEnumerable<TouristRoute> GetTouristRoutes(string? keyword, string? ratingOperator, int? ratingValue);
-        TouristRoute? GetTouristRoute(Guid touristRouteId);
-        bool TouristRouteExists(Guid touristRouteId);
-        IEnumerable<TouristRoutePicture> GetPicturesByTouristRouteId(Guid touristRouteId);
 
-        TouristRoutePicture? GetPicture(int pictureId);
-
+        Task<IEnumerable<TouristRoute?>> GetTouristRoutesAsync(string? keyword, string? ratingOperator, int? ratingValue);
+        Task<TouristRoute?> GetTouristRouteAsync(Guid touristRouteId);
+        Task<bool> TouristRouteExistsAsync(Guid touristRouteId);
+        Task<IEnumerable<TouristRoutePicture>> GetPicturesByTouristRouteIdAsync(Guid touristRouteId);
+        Task<TouristRoutePicture?> GetPictureAsync(int pictureId);
+        Task<IEnumerable<TouristRoute>> GetTouristRoutesByIDListAsync(IEnumerable<Guid> ids);
         void AddTouristRoute(TouristRoute touristRoute);
-
-         void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
-        bool Save();
+        void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
+        Task<bool> SaveAsync();
     }
 }
