@@ -1,10 +1,16 @@
 
 
+using System.ComponentModel.DataAnnotations;
+
 namespace WebApiWithRoleAuthentication.Dtos
 {
     public class TouristRouteForCreationDto
     {
+        [Required(ErrorMessage = "title 不可为空")]
+        [MaxLength(100)]
         public string? Title { get; set; }
+        [Required]
+        [MaxLength(1500)]
         public string? Description { get; set; }
         public decimal Price { get; set; }
 
@@ -18,5 +24,8 @@ namespace WebApiWithRoleAuthentication.Dtos
         public string? TravelDays { get; set; }
         public string? TripType { get; set; }
         public string? DepartureCity { get; set; }
+
+        public ICollection<TouristRoutePictureForCreationDto> TouristRoutePictures { get; set; }
+        = new List<TouristRoutePictureForCreationDto>();
     }
 }
