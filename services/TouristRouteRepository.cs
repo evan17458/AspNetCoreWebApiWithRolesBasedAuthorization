@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebApiWithRoleAuthentication.Data;
 using WebApiWithRoleAuthentication.Models;
 
@@ -19,7 +20,9 @@ namespace WebApiWithRoleAuthentication.Services
 
         public IEnumerable<TouristRoute> GetTouristRoutes()
         {
-            return _context.TouristRoutes;
+
+            // include vs join
+            return _context.TouristRoutes.Include(t => t.TouristRoutePictures);
         }
 
         public bool TouristRouteExists(Guid touristRouteId)
@@ -32,5 +35,12 @@ namespace WebApiWithRoleAuthentication.Services
             return _context.TouristRoutePictures
                 .Where(p => p.TouristRouteId == touristRouteId).ToList();
         }
+        public TouristRoutePicture? GetPicture(int pictureId)
+        {
+            return _context.TouristRoutePictures.Where(p => p.Id == pictureId).FirstOrDefault();
+        }
+
+
+
     }
 }

@@ -8,5 +8,7 @@ namespace WebApiWithRoleAuthentication.Services
         TouristRoute? GetTouristRoute(Guid touristRouteId);
         bool TouristRouteExists(Guid touristRouteId);
         IEnumerable<TouristRoutePicture> GetPicturesByTouristRouteId(Guid touristRouteId);
+
+        TouristRoutePicture? GetPicture(int pictureId);
     }
 }
