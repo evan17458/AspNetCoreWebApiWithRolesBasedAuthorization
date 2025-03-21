@@ -25,6 +25,32 @@ namespace WebApiWithRoleAuthentication.Services
             return _context.TouristRoutes.Include(t => t.TouristRoutePictures);
         }
 
+        public IEnumerable<TouristRoute> GetTouristRoutes(
+        string? keyword,
+        string? ratingOperator,
+        int? ratingValue
+        )
+        {
+            IQueryable<TouristRoute> result = _context
+                            .TouristRoutes
+                            .Include(t => t.TouristRoutePictures);
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
+                result = result.Where(t => (t.Title ?? "").Contains(keyword));
+            }
+            if (ratingValue >= 0)
+            {
+                result = ratingOperator switch
+                {
+                    "largerThan" => result.Where(t => t.Rating >= ratingValue),
+                    "lessThan" => result.Where(t => t.Rating <= ratingValue),
+                    _ => result.Where(t => t.Rating == ratingValue),
+                };
+            }
+            // include vs join
+            return result.ToList();
+        }
         public bool TouristRouteExists(Guid touristRouteId)
         {
             return _context.TouristRoutes.Any(t => t.Id == touristRouteId);

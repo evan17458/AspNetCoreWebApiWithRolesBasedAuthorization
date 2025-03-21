@@ -13,7 +13,7 @@ namespace WebApiWithRoleAuthentication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250321025520_routeinculdpicture")]
-    partial class routeinculdpicture
+    partial class Routeinculdpicture
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

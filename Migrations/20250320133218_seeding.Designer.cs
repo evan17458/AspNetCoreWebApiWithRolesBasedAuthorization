@@ -13,7 +13,7 @@ namespace WebApiWithRoleAuthentication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250320133218_seeding")]
-    partial class seeding
+    partial class Seeding
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

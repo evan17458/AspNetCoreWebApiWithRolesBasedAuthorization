@@ -5,7 +5,7 @@
 namespace WebApiWithRoleAuthentication.Migrations
 {
     /// <inheritdoc />
-    public partial class routeinculdpicture : Migration
+    public partial class Routeinculdpicture : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
