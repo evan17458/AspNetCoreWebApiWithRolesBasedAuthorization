@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApiWithRoleAuthentication.Dtos;
+using WebApiWithRoleAuthentication.Helper;
 using WebApiWithRoleAuthentication.Models;
 using WebApiWithRoleAuthentication.Services;
 
@@ -97,7 +98,21 @@ namespace WebApiWithRoleAuthentication.Controllers
             return NoContent();
         }
 
+        [HttpDelete("items/({itemIDs})")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> RemoveShoppingCartItems(
+        [ModelBinder(BinderType = typeof(ArrayModelBinder))]
+         [FromRoute] IEnumerable<int> itemIDs
+)
+        {
+            var lineitems = await _touristRouteRepository
+                .GeshoppingCartsByIdListAsync(itemIDs);
 
+            _touristRouteRepository.DeleteShoppingCartItems(lineitems);
+            await _touristRouteRepository.SaveAsync();
+
+            return NoContent();
+        }
 
 
     }
