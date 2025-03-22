@@ -18,6 +18,8 @@ namespace WebApiWithRoleAuthentication.Services
 
         Task AddShoppingCartItem(LineItem lineItem);
 
+        Task<LineItem?> GetShoppingCartItemByItemId(int lineItemId);
+        void DeleteShoppingCartItem(LineItem lineItem);
         Task<bool> SaveAsync();
     }
 }
