@@ -15,6 +15,9 @@ namespace WebApiWithRoleAuthentication.Services
         void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
         Task<ShoppingCart?> GetShoppingCartByUserId(string? userId);
         Task CreateShoppingCart(ShoppingCart shoppingCart);
+
+        Task AddShoppingCartItem(LineItem lineItem);
+
         Task<bool> SaveAsync();
     }
 }
