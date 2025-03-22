@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApiWithRoleAuthentication.Models;
+using WebApiWithRoleAuthentication.Services;
 
 namespace WebApiWithRoleAuthentication.Controllers
 {
@@ -16,12 +17,13 @@ namespace WebApiWithRoleAuthentication.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-
-        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        private readonly ITouristRouteRepository _touristRouteRepository;
+        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ITouristRouteRepository touristRouteRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _touristRouteRepository = touristRouteRepository;
         }
 
         [HttpPost("register")]
@@ -33,6 +35,15 @@ namespace WebApiWithRoleAuthentication.Controllers
             if (result.Succeeded)
             {
                 //await _userManager.AddToRoleAsync(user, "User");
+
+                // 3 初始化购物车
+                var shoppingCart = new ShoppingCart()
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = user.Id
+                };
+                await _touristRouteRepository.CreateShoppingCart(shoppingCart);
+                await _touristRouteRepository.SaveAsync();
                 return Ok(new { message = "User registered successfully" });
             }
 

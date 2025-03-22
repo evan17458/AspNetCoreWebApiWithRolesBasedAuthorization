@@ -13,6 +13,8 @@ namespace WebApiWithRoleAuthentication.Services
         Task<IEnumerable<TouristRoute>> GetTouristRoutesByIDListAsync(IEnumerable<Guid> ids);
         void AddTouristRoute(TouristRoute touristRoute);
         void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
+        Task<ShoppingCart?> GetShoppingCartByUserId(string? userId);
+        Task CreateShoppingCart(ShoppingCart shoppingCart);
         Task<bool> SaveAsync();
     }
 }
