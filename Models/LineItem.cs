@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using WebApiWithRoleAuthentication.Models;
 
-namespace FWebApiWithRoleAuthentication.Models
+
+namespace WebApiWithRoleAuthentication.Models
 {
     public class LineItem
     {

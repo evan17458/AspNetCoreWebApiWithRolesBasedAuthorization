@@ -22,33 +22,6 @@ namespace WebApiWithRoleAuthentication.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("FWebApiWithRoleAuthentication.Models.LineItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<double?>("DiscountPresent")
-                        .HasColumnType("double precision");
-
-                    b.Property<decimal>("OriginalPrice")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<Guid?>("ShoppingCartId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TouristRouteId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TouristRouteId");
-
-                    b.ToTable("LineItems");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -256,6 +229,51 @@ namespace WebApiWithRoleAuthentication.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("WebApiWithRoleAuthentication.Models.LineItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("DiscountPresent")
+                        .HasColumnType("double precision");
+
+                    b.Property<decimal>("OriginalPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<Guid?>("ShoppingCartId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TouristRouteId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.HasIndex("TouristRouteId");
+
+                    b.ToTable("LineItems");
+                });
+
+            modelBuilder.Entity("WebApiWithRoleAuthentication.Models.ShoppingCart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("WebApiWithRoleAuthentication.Models.TouristRoute", b =>
@@ -930,17 +948,6 @@ namespace WebApiWithRoleAuthentication.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FWebApiWithRoleAuthentication.Models.LineItem", b =>
-                {
-                    b.HasOne("WebApiWithRoleAuthentication.Models.TouristRoute", "TouristRoute")
-                        .WithMany()
-                        .HasForeignKey("TouristRouteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TouristRoute");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1000,6 +1007,30 @@ namespace WebApiWithRoleAuthentication.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebApiWithRoleAuthentication.Models.LineItem", b =>
+                {
+                    b.HasOne("WebApiWithRoleAuthentication.Models.ShoppingCart", null)
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("ShoppingCartId");
+
+                    b.HasOne("WebApiWithRoleAuthentication.Models.TouristRoute", "TouristRoute")
+                        .WithMany()
+                        .HasForeignKey("TouristRouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TouristRoute");
+                });
+
+            modelBuilder.Entity("WebApiWithRoleAuthentication.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("WebApiWithRoleAuthentication.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WebApiWithRoleAuthentication.Models.TouristRoutePicture", b =>
                 {
                     b.HasOne("WebApiWithRoleAuthentication.Models.TouristRoute", "TouristRoute")
@@ -1016,6 +1047,11 @@ namespace WebApiWithRoleAuthentication.Migrations
                     b.Navigation("Claims");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("WebApiWithRoleAuthentication.Models.ShoppingCart", b =>
+                {
+                    b.Navigation("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("WebApiWithRoleAuthentication.Models.TouristRoute", b =>
