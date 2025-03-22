@@ -5,6 +5,7 @@ using WebApiWithRoleAuthentication.Models;
 
 using Newtonsoft.Json;
 using System.Reflection;
+using FWebApiWithRoleAuthentication.Models;
 
 namespace WebApiWithRoleAuthentication.Data
 {
@@ -15,6 +16,9 @@ namespace WebApiWithRoleAuthentication.Data
         }
         public DbSet<TouristRoute> TouristRoutes { get; set; }
         public DbSet<TouristRoutePicture> TouristRoutePictures { get; set; }
+
+
+        public DbSet<LineItem> LineItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
