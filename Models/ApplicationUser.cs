@@ -6,6 +6,11 @@ namespace WebApiWithRoleAuthentication.Models
     public class ApplicationUser : IdentityUser
     {
         public string? Address { get; set; }
+        [JsonIgnore]
+        public ShoppingCart? ShoppingCart { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Order>? Orders { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<IdentityUserRole<string>>? UserRoles { get; set; }
