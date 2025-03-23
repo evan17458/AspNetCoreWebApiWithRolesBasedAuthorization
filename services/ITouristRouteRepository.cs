@@ -5,7 +5,7 @@ namespace WebApiWithRoleAuthentication.Services
     public interface ITouristRouteRepository
     {
 
-        Task<IEnumerable<TouristRoute?>> GetTouristRoutesAsync(string? keyword, string? ratingOperator, int? ratingValue, int pageSize, int pageNumber);
+        Task<IEnumerable<TouristRoute?>> GetTouristRoutesAsync(string? keyword, string? ratingOperator, int? ratingValue, int pageSize, int pageNumber, string? orderBy);
         Task<TouristRoute?> GetTouristRouteAsync(Guid touristRouteId);
         Task<bool> TouristRouteExistsAsync(Guid touristRouteId);
         Task<IEnumerable<TouristRoutePicture>> GetPicturesByTouristRouteIdAsync(Guid touristRouteId);

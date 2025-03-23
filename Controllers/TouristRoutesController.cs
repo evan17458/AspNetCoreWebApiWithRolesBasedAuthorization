@@ -1,14 +1,12 @@
-
 using WebApiWithRoleAuthentication.Services;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using WebApiWithRoleAuthentication.Dtos;
-
 using WebApiWithRoleAuthentication.ResourceParameters;
 using WebApiWithRoleAuthentication.Models;
 namespace WebApiWithRoleAuthentication.Controllers
 {
-    [Route("api/[controller]")] // api/touristroute
+    [Route("api/[controller]")]
     [ApiController]
     public class TouristRoutesController : ControllerBase
     {
@@ -27,16 +25,15 @@ namespace WebApiWithRoleAuthentication.Controllers
         [HttpHead]
         public async Task<IActionResult> GerTouristRoutes(
             [FromQuery] TouristRouteResourceParamaters paramaters
-        //[FromQuery] string keyword,
-        //string rating // 小于lessThan, 大于largerThan, 等于equalTo lessThan3, largerThan2, equalTo5 
-        )// FromQuery vs FromBody
+        )
         {
             var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(paramaters.Keyword, paramaters.RatingOperator, paramaters.RatingValue,
                     paramaters.PageSize,
-                    paramaters.PageNumber);
+                    paramaters.PageNumber,
+                    paramaters.OrderBy);
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
-                return NotFound("没有旅游路线");
+                return NotFound("没有旅游路線");
             }
             var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
             return Ok(touristRoutesDto);
@@ -49,7 +46,7 @@ namespace WebApiWithRoleAuthentication.Controllers
             var touristRouteFromRepo = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
             if (touristRouteFromRepo == null)
             {
-                return NotFound($"旅游路线{touristRouteId}找不到");
+                return NotFound($"旅游路線{touristRouteId}找不到");
             }
             var touristRouteDto = _mapper.Map<TouristRouteDto>(touristRouteFromRepo);
             return Ok(touristRouteDto);

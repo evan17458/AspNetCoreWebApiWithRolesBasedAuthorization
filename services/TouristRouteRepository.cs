@@ -23,7 +23,8 @@ namespace WebApiWithRoleAuthentication.Services
             string? ratingOperator,
             int? ratingValue,
             int pageSize,
-            int pageNumber
+            int pageNumber,
+            string? orderBy
         )
         {
             IQueryable<TouristRoute> result = _context
@@ -51,6 +52,17 @@ namespace WebApiWithRoleAuthentication.Services
             // 以pagesize為標準顯示一定量的資料
             result = result.Take(pageSize);
             // include vs join
+
+            if (!string.IsNullOrWhiteSpace(orderBy))
+            {
+                if (orderBy.ToLowerInvariant() == "originalprice")
+                {
+                    result = result.OrderBy(t => t.OriginalPrice);
+                }
+
+                //result.ApplySort(orderBy, _mappingDictionary);
+            }
+
             return await result.ToListAsync();
         }
 
