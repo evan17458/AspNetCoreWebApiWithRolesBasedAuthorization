@@ -21,7 +21,9 @@ namespace WebApiWithRoleAuthentication.Services
         public async Task<IEnumerable<TouristRoute?>> GetTouristRoutesAsync(
             string? keyword,
             string? ratingOperator,
-            int? ratingValue
+            int? ratingValue,
+            int pageSize,
+            int pageNumber
         )
         {
             IQueryable<TouristRoute> result = _context
@@ -41,6 +43,13 @@ namespace WebApiWithRoleAuthentication.Services
                     _ => result.Where(t => t.Rating == ratingValue),
                 };
             }
+
+            // pagination
+            // skip
+            var skip = (pageNumber - 1) * pageSize;
+            result = result.Skip(skip);
+            // 以pagesize為標準顯示一定量的資料
+            result = result.Take(pageSize);
             // include vs join
             return await result.ToListAsync();
         }
