@@ -92,9 +92,15 @@ namespace WebApiWithRoleAuthentication.Services
 
         public async Task<ShoppingCart?> GetShoppingCartByUserId(string? userId)
         {
-            return await _context.ShoppingCarts
+            if (string.IsNullOrEmpty(userId))
+            {
+                return null;
+            }
+
+            return await _context!.ShoppingCarts
                 .Include(s => s.User)
-                .Include(s => s.ShoppingCartItems).ThenInclude(li => li.TouristRoute)
+                .Include(s => s.ShoppingCartItems!)
+                .ThenInclude(li => li.TouristRoute)
                 .Where(s => s.UserId == userId)
                 .FirstOrDefaultAsync();
         }
@@ -131,6 +137,11 @@ namespace WebApiWithRoleAuthentication.Services
         public void DeleteShoppingCartItems(IEnumerable<LineItem> lineItems)
         {
             _context.LineItems.RemoveRange(lineItems);
+        }
+
+        public async Task AddOrderAsync(Order order)
+        {
+            await _context.Orders.AddAsync(order);
         }
 
         public async Task<bool> SaveAsync()

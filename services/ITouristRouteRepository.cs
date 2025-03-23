@@ -22,6 +22,7 @@ namespace WebApiWithRoleAuthentication.Services
         void DeleteShoppingCartItem(LineItem lineItem);
         Task<IEnumerable<LineItem>> GeshoppingCartsByIdListAsync(IEnumerable<int> ids);
         void DeleteShoppingCartItems(IEnumerable<LineItem> lineItems);
+        Task AddOrderAsync(Order order);
         Task<bool> SaveAsync();
     }
 }
