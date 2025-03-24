@@ -36,7 +36,7 @@ namespace WebApiWithRoleAuthentication.Controllers
             {
                 //await _userManager.AddToRoleAsync(user, "User");
 
-                // 3 初始化购物车
+                // 3 初始化購物車
                 var shoppingCart = new ShoppingCart()
                 {
                     Id = Guid.NewGuid(),

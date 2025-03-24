@@ -7,11 +7,11 @@ namespace WebApiWithRoleAuthentication.Models
 {
     public enum OrderStateEnum
     {
-        Pending, // 订单已生成
-        Processing, // 支付处理中
+        Pending, // 訂單已生成
+        Processing, // 支付處理中
         Completed, // 交易成功
         Declined, // 交易失败
-        Cancelled, // 订单取消
+        Cancelled, // 訂單取消
         Refund, // 已退款
     }
     public enum OrderStateTriggerEnum

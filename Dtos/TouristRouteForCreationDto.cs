@@ -6,7 +6,7 @@ namespace WebApiWithRoleAuthentication.Dtos
 {
     public class TouristRouteForCreationDto
     {
-        [Required(ErrorMessage = "title 不可为空")]
+        [Required(ErrorMessage = "title 不可為空")]
         [MaxLength(100)]
         public string? Title { get; set; }
         [Required]

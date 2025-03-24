@@ -33,11 +33,11 @@ namespace WebApiWithRoleAuthentication.Controllers
         // [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetShoppingCart()
         {
-            // 1 获得当前用户
+            // 1 取得當前用户
             var userId = _httpContextAccessor
              .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // 2 使用userid获得购物车
+            // 2 使用userid取得購物車
             var shoppingCart = await _touristRouteRepository.GetShoppingCartByUserId(userId);
 
             return Ok(_mapper.Map<ShoppingCartDto>(shoppingCart));
@@ -49,20 +49,20 @@ namespace WebApiWithRoleAuthentication.Controllers
         [FromBody] AddShoppingCartItemDto addShoppingCartItemDto
 )
         {
-            // 1 获得当前用户
+            // 1 取得當前用户
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // 2 使用userid获得购物车
+            // 2 使用userid取得購物車
             var shoppingCart = await _touristRouteRepository
                 .GetShoppingCartByUserId(userId);
 
-            // 3 创建lineItem
+            // 3 創建lineItem
             var touristRoute = await _touristRouteRepository
                 .GetTouristRouteAsync(addShoppingCartItemDto.TouristRouteId);
             if (touristRoute == null)
             {
-                return NotFound("旅游路线不存在");
+                return NotFound("旅游路線不存在");
             }
 
             var lineItem = new LineItem()
@@ -73,7 +73,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 DiscountPresent = touristRoute.DiscountPresent
             };
 
-            // 4 添加lineitem，并保存数据库
+            // 4 添加lineitem，並保存資料庫
             await _touristRouteRepository.AddShoppingCartItem(lineItem);
             await _touristRouteRepository.SaveAsync();
 
@@ -84,12 +84,12 @@ namespace WebApiWithRoleAuthentication.Controllers
         //[Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> DeleteShoppingCartItem([FromRoute] int itemId)
         {
-            // 1 获取lineitem数据
+            // 1 取lineitem資料
             var lineItem = await _touristRouteRepository
                 .GetShoppingCartItemByItemId(itemId);
             if (lineItem == null)
             {
-                return NotFound("购物车商品找不到");
+                return NotFound("購物車商品找不到");
             }
 
             _touristRouteRepository.DeleteShoppingCartItem(lineItem);
@@ -118,14 +118,14 @@ namespace WebApiWithRoleAuthentication.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Checkout()
         {
-            // 1 获得当前用户
+            // 1 取得當前用户
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // 2 使用userid获得购物车
+            // 2 使用userid取得購物車
             var shoppingCart = await _touristRouteRepository.GetShoppingCartByUserId(userId);
 
-            // 3 创建订单
+            // 3 創建訂單
             var order = new Order()
             {
                 Id = Guid.NewGuid(),
@@ -140,7 +140,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 shoppingCart.ShoppingCartItems = null;
             }
 
-            // 4 保存数据
+            // 4 保存資料
             await _touristRouteRepository.AddOrderAsync(order);
             await _touristRouteRepository.SaveAsync();
 

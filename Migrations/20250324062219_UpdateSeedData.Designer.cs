@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApiWithRoleAuthentication.Data;
@@ -11,9 +12,11 @@ using WebApiWithRoleAuthentication.Data;
 namespace WebApiWithRoleAuthentication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250324062219_UpdateSeedData")]
+    partial class UpdateSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -374,7 +377,6 @@ namespace WebApiWithRoleAuthentication.Migrations
                             Fees = "",
                             Notes = "",
                             OriginalPrice = 11999.99m,
-                            Rating = 3.0,
                             Title = "埃及阿斯旺+盧克索+紅海Red Sea+開羅+亞歷山大12日跟團遊(5鑽)"
                         },
                         new
@@ -387,7 +389,6 @@ namespace WebApiWithRoleAuthentication.Migrations
                             Fees = "",
                             Notes = "",
                             OriginalPrice = 799.98m,
-                            Rating = 4.0,
                             Title = "蘇州+烏鎮+杭州3日2晚跟團遊(5鑽)"
                         },
                         new
@@ -399,163 +400,7 @@ namespace WebApiWithRoleAuthentication.Migrations
                             Fees = "",
                             Notes = "",
                             OriginalPrice = 7003m,
-                            Rating = 5.0,
                             Title = "美國夏威夷7日5晚自由行·『性價比甄選』"
-                        },
-                        new
-                        {
-                            Id = new Guid("e8c2b5f9-12ab-4d7e-9f33-6a8b9c4d2e1f"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【純玩無購物】20人小團|全程美食+溫泉體驗|富士山+金閣寺+大阪城|升級新幹線|專業中文導遊",
-                            DiscountPresent = 0.14999999999999999,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 8999.50m,
-                            Rating = 4.0,
-                            Title = "日本東京+大阪+京都7日跟團遊(5鑽)"
-                        },
-                        new
-                        {
-                            Id = new Guid("d4f7a9e1-5c3b-4e8d-b2a6-7f9c1e3d5a2b"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【歐洲經典之旅】15人精品團|含簽證+全程餐|鬥獸場+聖馬可廣場+比薩斜塔|贈送貢多拉遊船",
-                            DiscountPresent = 0.20000000000000001,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 14500.00m,
-                            Rating = 5.0,
-                            Title = "義大利羅馬+佛羅倫斯+威尼斯10日深度遊(5鑽)"
-                        },
-                        new
-                        {
-                            Id = new Guid("b2c3d4e5-6f67-4891-80a1-c2d3e4f5a6b7"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【熱帶海島度假】酒店自選|大皇宮+玉佛寺+普吉島沙灘|機票+酒店套餐|輕鬆自由行",
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 4500.75m,
-                            Rating = 3.0,
-                            Title = "泰國曼谷+普吉島6日5晚自由行"
-                        },
-                        new
-                        {
-                            Id = new Guid("b2c3d4e5-f6f7-4891-a0b1-c2d3e4f5a6b7"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【品質保證】大皇宮+玉佛寺|水上市場|芭堤雅海灘|金沙島浮潛|網紅夜市|泰式按摩體驗|特色美食|專業領隊貼心服務",
-                            DiscountPresent = 0.20000000000000001,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 3899.99m,
-                            Rating = 4.0,
-                            Title = "泰國曼谷+芭堤雅5日4晚跟團遊(4鑽)"
-                        },
-                        new
-                        {
-                            Id = new Guid("e8f9d0c1-b2a3-4567-89e0-f1c2d3e4f5a6"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【雙城遊】聖淘沙名勝世界|環球影城+SEA海洋館|魚尾獅公園|濱海灣花園|雲頂高原|吉隆坡雙子塔|精選五星酒店|機場接送",
-                            DiscountPresent = 0.12,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 6799.95m,
-                            Rating = 5.0,
-                            Title = "新加坡+馬來西亞6日5晚自由行『豪華體驗』"
-                        },
-                        new
-                        {
-                            Id = new Guid("a4b5c6d7-e8f9-0123-4567-89a0b1c2d3e4"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【經典歐洲】巴黎鐵塔|羅浮宮|少女峰|盧塞恩湖|米蘭大教堂|威尼斯水都|佛羅倫薩|羅馬競技場|梵蒂岡|精選五星酒店|米其林餐廳",
-                            DiscountPresent = 0.080000000000000002,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 19999.99m,
-                            Rating = 5.0,
-                            Title = "歐洲法國+瑞士+意大利12日10晚跟團遊(5鑽)"
-                        },
-                        new
-                        {
-                            Id = new Guid("c0d1e2f3-a4b5-6789-0123-456789abcdef"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【精選酒店】悉尼歌劇院|藍山國家公園|大堡礁一日遊|十二門徒|企鵝歸巢|華納電影世界|可倫賓野生動物園|特色農場體驗",
-                            DiscountPresent = 0.10000000000000001,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 12599.99m,
-                            Rating = 4.0,
-                            Title = "澳洲悉尼+墨爾本+黃金海岸8日7晚自由行·『尊享之旅』"
-                        },
-                        new
-                        {
-                            Id = new Guid("f6a7b8c9-d0e1-2345-6789-abcdef012345"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【超值優惠】明洞購物|南山塔|景福宮|北村韓屋村|濟州島火山口|城山日出峰|泰迪熊博物館|韓服體驗|特色美食|品質住宿",
-                            DiscountPresent = 0.14999999999999999,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 4599.99m,
-                            Rating = 4.0,
-                            Title = "韓國首爾+濟州島5日4晚跟團遊(4鑽)"
-                        },
-                        new
-                        {
-                            Id = new Guid("e2f3a4b5-c6d7-8901-2345-6789abcdef01"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【深度遊】台北101|九份老街|日月潭|阿里山日出|墾丁海灘|花蓮太魯閣|夜市美食|溫泉體驗|專業導遊|舒適住宿",
-                            DiscountPresent = 0.10000000000000001,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 5299.95m,
-                            Rating = 4.0,
-                            Title = "台灣環島8日7晚跟團遊(4鑽)"
-                        },
-                        new
-                        {
-                            Id = new Guid("d8e9f0a1-b2c3-4567-8901-23456789abcd"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【度假勝地】烏布皇宮|海神廟|庫塔海灘|金巴蘭海灘|聖猴森林|百度庫火山|下午茶體驗|SPA按摩|五星度假村|私人泳池別墅",
-                            DiscountPresent = 0.17999999999999999,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 5899.99m,
-                            Rating = 5.0,
-                            Title = "印度尼西亞巴厘島6日5晚自由行·『熱帶天堂』"
-                        },
-                        new
-                        {
-                            Id = new Guid("c4d5e6f7-a8b9-0123-4567-890123456789"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【奇幻之旅】藍色清真寺|聖索菲亞大教堂|博斯普魯斯海峽|棉花堡|以弗所古城|熱氣球之旅|洞穴酒店|特色土耳其浴|美食饗宴",
-                            DiscountPresent = 0.12,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 9999.95m,
-                            Rating = 5.0,
-                            Title = "土耳其伊斯坦布爾+卡帕多奇亞10日8晚跟團遊(5鑽)"
-                        },
-                        new
-                        {
-                            Id = new Guid("b0c1d2e3-f4a5-6789-0123-456789abcdef"),
-                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "【楓葉國度】尼亞加拉大瀑布|千島湖|CNT塔|魁北克古城|楓糖農場|特色冰酒莊園|國家博物館|精選酒店|舒適巴士|專業領隊",
-                            DiscountPresent = 0.080000000000000002,
-                            Features = "",
-                            Fees = "",
-                            Notes = "",
-                            OriginalPrice = 8899.99m,
-                            Rating = 4.0,
-                            Title = "加拿大東海岸多倫多+渥太華+蒙特利爾7日6晚跟團遊(4鑽)"
                         });
                 });
 

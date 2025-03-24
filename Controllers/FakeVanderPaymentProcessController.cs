@@ -13,7 +13,7 @@ namespace WebApiWithRoleAuthentication.Controllers
             [FromQuery] bool returnFault = false
         )
         {
-            // 假装在处理
+            // 假装在處理
             await Task.Delay(3000);
 
             // if returnFault is true, 返回支付失败

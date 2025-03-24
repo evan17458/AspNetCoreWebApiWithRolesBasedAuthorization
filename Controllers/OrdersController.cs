@@ -34,11 +34,11 @@ namespace WebApiWithRoleAuthentication.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetOrders()
         {
-            // 1. 获得当前用户
+            // 1. 取得當前用户
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // 2. 使用用户id来获取订单历史记录
+            // 2. 使用用户id来取得訂單歷歷史記錄
 
             var orders = await _touristRouteRepository.GetOrdersByUserId(userId ?? string.Empty);
 
@@ -49,7 +49,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GerOrderById([FromRoute] Guid orderId)
         {
-            // 1. 获得当前用户
+            // 1. 取得當前用户
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -63,11 +63,11 @@ namespace WebApiWithRoleAuthentication.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> placeOrder([FromRoute] Guid orderId)
         {
-            // 1. 获得当前用户
+            // 1. 取得當前用户
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // 2. 开始处理支付
+            // 2. 開始處理支付
             var order = await _touristRouteRepository.GetOrderById(orderId);
             order?.PaymentProcessing();
             await _touristRouteRepository.SaveAsync();
@@ -89,7 +89,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 isApproved = jsonObject?["approved"]?.Value<bool>() ?? false;
             }
 
-            // 5. 如果第三方支付成功. 完成订单
+            // 5. 如果第三方支付成功. 完成訂單
             if (isApproved)
             {
                 order?.PaymentApprove();

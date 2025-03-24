@@ -30,7 +30,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         {
             if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
             {
-                return NotFound("旅游线路不存在");
+                return NotFound("旅游路線不存在");
             }
 
             var picturesFromRepo = await _touristRouteRepository.GetPicturesByTouristRouteIdAsync(touristRouteId);
@@ -48,7 +48,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         {
             if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
             {
-                return NotFound("旅游线路不存在");
+                return NotFound("旅游路線不存在");
             }
 
             var pictureFromRepo = await _touristRouteRepository.GetPictureAsync(pictureId);
@@ -67,7 +67,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         {
             if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
             {
-                return NotFound("旅游线路不存在");
+                return NotFound("旅游路線不存在");
             }
 
             var pictureModel = _mapper.Map<TouristRoutePicture>(touristRoutePictureForCreationDto);
