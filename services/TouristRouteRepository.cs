@@ -17,7 +17,10 @@ namespace WebApiWithRoleAuthentication.Services
         {
             return await _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefaultAsync(n => n.Id == touristRouteId);
         }
-
+        public bool TouristRouteExists(Guid touristRouteId)
+        {
+            return _context.TouristRoutes.Any(t => t.Id == touristRouteId);
+        }
         public async Task<IEnumerable<TouristRoute?>> GetTouristRoutesAsync(
             string? keyword,
             string? ratingOperator,
@@ -111,6 +114,10 @@ namespace WebApiWithRoleAuthentication.Services
             _context.TouristRoutePictures.Add(touristRoutePicture);
         }
 
+        public void DeleteTouristRoute(TouristRoute touristRoute)
+        {
+            _context.TouristRoutes.Remove(touristRoute);
+        }
         public async Task<ShoppingCart?> GetShoppingCartByUserId(string? userId)
         {
             if (string.IsNullOrEmpty(userId))
