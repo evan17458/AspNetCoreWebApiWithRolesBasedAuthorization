@@ -79,7 +79,7 @@ var app = builder.Build();
 var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 
 // 配置 Kestrel 伺服器監聽
-app.Urls.Add($"http://0.0.0.0:{port}");
+//app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.UseSwagger();
 app.UseSwaggerUI();

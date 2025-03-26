@@ -21,23 +21,22 @@ namespace WebApiWithRoleAuthentication.Controllers
             _mapper = mapper;
         }
 
-        // [HttpGet]
-        // [HttpHead]
-        // public async Task<IActionResult> GerTouristRoutes(
-        //     [FromQuery] TouristRouteResourceParamaters paramaters
-        // )
-        // {
-        //     var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(paramaters.Keyword, paramaters.RatingOperator, paramaters.RatingValue,
-        //             paramaters.PageSize,
-        //             paramaters.PageNumber,
-        //             paramaters.OrderBy);
-        //     if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
-        //     {
-        //         return NotFound("没有旅游路線");
-        //     }
-        //     var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
-        //     return Ok(touristRoutesDto);
-        // }
+        [HttpGet]
+        public async Task<IActionResult> GerTouristRoutes(
+            [FromQuery] TouristRouteResourceParamaters paramaters
+        )
+        {
+            var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(paramaters.Keyword, paramaters.RatingOperator, paramaters.RatingValue,
+                    paramaters.PageSize,
+                    paramaters.PageNumber,
+                    paramaters.OrderBy);
+            if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
+            {
+                return NotFound("没有旅游路線");
+            }
+            var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
+            return Ok(touristRoutesDto);
+        }
 
         // api/touristroutes/{touristRouteId}
         [HttpGet("{touristRouteId}", Name = "GetTouristRouteById")]
