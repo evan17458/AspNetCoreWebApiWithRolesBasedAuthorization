@@ -75,6 +75,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+// 取得環境變數中的端口，若無則預設 10000
+var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+
+// 配置 Kestrel 伺服器監聽
+app.Urls.Add($"http://0.0.0.0:{port}");
+
 app.UseSwagger();
 app.UseSwaggerUI();
 

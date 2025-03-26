@@ -1,9 +1,10 @@
 # 使用官方的 ASP.NET Core 運行時映像作為基礎映像
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 8080  
+EXPOSE 10000
 # 設置環境變數
 ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://0.0.0.0:10000
 
 # 使用 SDK 映像來構建專案
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
