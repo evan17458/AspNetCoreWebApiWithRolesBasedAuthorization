@@ -23,4 +23,6 @@ RUN dotnet publish "WebApiWithRoleAuthentication.csproj" -c Release -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 ENTRYPOINT ["dotnet", "WebApiWithRoleAuthentication.dll"]
