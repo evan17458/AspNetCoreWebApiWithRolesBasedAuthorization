@@ -48,13 +48,6 @@ namespace WebApiWithRoleAuthentication.Services
                 };
             }
 
-            // pagination
-            // skip
-            var skip = (pageNumber - 1) * pageSize;
-            result = result.Skip(skip);
-            // 以pagesize為標準顯示一定量的資料
-            result = result.Take(pageSize);
-            // include vs join
 
             if (!string.IsNullOrWhiteSpace(orderBy))
             {
@@ -65,6 +58,15 @@ namespace WebApiWithRoleAuthentication.Services
 
                 //result.ApplySort(orderBy, _mappingDictionary);
             }
+
+            // pagination
+            // skip
+            var skip = (pageNumber - 1) * pageSize;
+            result = result.Skip(skip);
+            // 以pagesize為標準顯示一定量的資料
+            result = result.Take(pageSize);
+            // include vs join
+
 
             return await result.ToListAsync();
         }
