@@ -28,7 +28,7 @@ namespace WebApiWithRoleAuthentication.Controllers
             _logger = logger;
         }
 
-        [HttpPost("register")]
+        [HttpPost("register")] //驗證使用者的帳號密碼，並在驗證成功後生成並返回一個 JWT
         public async Task<IActionResult> Register([FromBody] Register model)
         {
 
@@ -54,7 +54,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 };
                 await _touristRouteRepository.CreateShoppingCart(shoppingCart);
                 await _touristRouteRepository.SaveAsync();
-                return Ok(new { message = "User registered successfully" });
+                return Ok(new { message = "你註冊成功" });
             }
             _logger.LogWarning("使用者 {Username} 註冊失敗，錯誤: {@Errors}",
                model.Username,
@@ -65,10 +65,9 @@ namespace WebApiWithRoleAuthentication.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
-            _logger.LogInformation("收到登入請求，使用者名稱: {@Username}", model.Username);
             var user = await _userManager.FindByNameAsync(model.Username);
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))//檢查提供的密碼是否與資料庫中該使用者的密碼匹配。
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -77,9 +76,27 @@ namespace WebApiWithRoleAuthentication.Controllers
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
-
+                //JwtRegisteredClaimNames.Sub 是 JWT 的標準聲明，表示「主體」（Subject），
+                //通常用來儲存使用者的唯一標識，這裡使用的是 user.UserName（使用者名稱）。
+                //JwtRegisteredClaimNames.Jti 是 JWT 的標準聲明，表示「JWT ID」，用來確保每個 Token 都有唯一的標識符。
+                //Guid.NewGuid().ToString() 生成一個全球唯一的識別碼（GUID）並轉為字串，作為 Token 的唯一 ID。
                 authClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
+                //ClaimTypes.Role 表示聲明的類型為「角色」。
+                //role 是角色的名稱（例如 "Admin" 或 "User"）。
+                //結果是一個 Claim 集合，例如[Claim("Role", "Admin"), Claim("Role", "User")]。
+
+                //假設某個使用者的資料如下：
+                //使用者名稱：john_doe
+                //角色：["User", "Editor"]
+                //執行這段程式碼後，authClaims 的內容可能是：
+
+                //  [
+                //     Claim("sub", "john_doe"),
+                //   Claim("jti", "550e8400-e29b-41d4-a716-446655440000"),
+                //   Claim("role", "User"),
+                //   Claim("role", "Editor")
+                //  ]
                 var token = new JwtSecurityToken(
                     issuer: _configuration["Jwt:Issuer"],
                     expires: DateTime.Now.AddMinutes(double.Parse(_configuration["Jwt:ExpiryMinutes"]!)),
@@ -101,7 +118,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 var result = await _roleManager.CreateAsync(new IdentityRole(role));
                 if (result.Succeeded)
                 {
-                    return Ok(new { message = "Role added successfully" });
+                    return Ok(new { message = "角色新增增成功" });
                 }
 
                 return BadRequest(result.Errors);
@@ -122,7 +139,7 @@ namespace WebApiWithRoleAuthentication.Controllers
             var result = await _userManager.AddToRoleAsync(user, model.Role);
             if (result.Succeeded)
             {
-                return Ok(new { message = "Role assigned successfully" });
+                return Ok(new { message = "角色分配成功" });
             }
 
             return BadRequest(result.Errors);
