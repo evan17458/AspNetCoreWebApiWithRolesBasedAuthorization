@@ -4,6 +4,7 @@ using AutoMapper;
 using WebApiWithRoleAuthentication.Dtos;
 using WebApiWithRoleAuthentication.ResourceParameters;
 using WebApiWithRoleAuthentication.Models;
+using Microsoft.AspNetCore.Authorization;
 namespace WebApiWithRoleAuthentication.Controllers
 {
     [Route("api/[controller]")]
@@ -22,6 +23,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         }
 
         [HttpGet]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GerTouristRoutes(
             [FromQuery] TouristRouteResourceParamaters paramaters
         )
