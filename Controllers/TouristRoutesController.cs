@@ -23,7 +23,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         }
 
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GerTouristRoutes(
             [FromQuery] TouristRouteResourceParamaters paramaters
         )

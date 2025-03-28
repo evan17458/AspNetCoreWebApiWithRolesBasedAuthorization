@@ -32,19 +32,13 @@ namespace WebApiWithRoleAuthentication.Controllers
         public async Task<IActionResult> Register([FromBody] Register model)
         {
 
-            // 記錄收到註冊請求
-            _logger.LogInformation("收到註冊請求，使用者名稱: {@Username}, 電子郵件: {@Email}",
-                model.Username,
-                model.Email);
+
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                //await _userManager.AddToRoleAsync(user, "User");
-                _logger.LogInformation("使用者 {Username} 創建成功，使用者ID: {UserId}",
-                model.Username,
-                user.Id);
+
 
                 // 3 初始化購物車
                 var shoppingCart = new ShoppingCart()
@@ -56,9 +50,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 await _touristRouteRepository.SaveAsync();
                 return Ok(new { message = "你註冊成功" });
             }
-            _logger.LogWarning("使用者 {Username} 註冊失敗，錯誤: {@Errors}",
-               model.Username,
-               result.Errors);
+
             return BadRequest(result.Errors);
         }
 
@@ -99,6 +91,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 //  ]
                 var token = new JwtSecurityToken(
                     issuer: _configuration["Jwt:Issuer"],
+                    audience: _configuration["Jwt:Audience"],
                     expires: DateTime.Now.AddMinutes(double.Parse(_configuration["Jwt:ExpiryMinutes"]!)),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)),
