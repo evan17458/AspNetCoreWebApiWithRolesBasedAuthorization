@@ -18,23 +18,33 @@ namespace WebApiWithRoleAuthentication.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly ITouristRouteRepository _touristRouteRepository;
-        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ITouristRouteRepository touristRouteRepository)
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ITouristRouteRepository touristRouteRepository, ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _touristRouteRepository = touristRouteRepository;
+            _logger = logger;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Register model)
         {
+
+            // 記錄收到註冊請求
+            _logger.LogInformation("收到註冊請求，使用者名稱: {@Username}, 電子郵件: {@Email}",
+                model.Username,
+                model.Email);
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
                 //await _userManager.AddToRoleAsync(user, "User");
+                _logger.LogInformation("使用者 {Username} 創建成功，使用者ID: {UserId}",
+                model.Username,
+                user.Id);
 
                 // 3 初始化購物車
                 var shoppingCart = new ShoppingCart()
@@ -46,14 +56,18 @@ namespace WebApiWithRoleAuthentication.Controllers
                 await _touristRouteRepository.SaveAsync();
                 return Ok(new { message = "User registered successfully" });
             }
-
+            _logger.LogWarning("使用者 {Username} 註冊失敗，錯誤: {@Errors}",
+               model.Username,
+               result.Errors);
             return BadRequest(result.Errors);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
+            _logger.LogInformation("收到登入請求，使用者名稱: {@Username}", model.Username);
             var user = await _userManager.FindByNameAsync(model.Username);
+
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);

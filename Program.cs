@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using WebApiWithRoleAuthentication.Data;
 using WebApiWithRoleAuthentication.Models;
@@ -9,7 +10,17 @@ using WebApiWithRoleAuthentication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 配置 Serilog
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration
+
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day); // 輸出到檔案，按天分割
+
+});
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,10 +32,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("Default")!));
 
 
-
-
-// 扫描 profile 文件
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //掃描 profile 文件
 
 
 
@@ -73,19 +81,16 @@ builder.Logging.AddConsole();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 
-// 取得環境變數中的端口，若無則預設 10000
-var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "10000"; // 取得環境變數中的端口，若無則預設 10000
 
-// 配置 Kestrel 伺服器監聽
-//app.Urls.Add($"http://0.0.0.0:{port}");
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-
+app.UseSerilogRequestLogging();
 app.UseAuthentication();
 
 app.UseAuthorization();
