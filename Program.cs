@@ -23,9 +23,9 @@ builder.Host.UseSerilog((context, configuration) =>
 });
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers();//負責處理 Web API 的核心邏輯，即路由請求到控制器並產生回應。
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer();//負責提供 API 的描述，以便於文件和測試。
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

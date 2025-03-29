@@ -65,11 +65,11 @@ namespace WebApiWithRoleAuthentication.Controllers
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName!),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
                 //JwtRegisteredClaimNames.Sub 是 JWT 的標準聲明，表示「主體」（Subject），
-                //通常用來儲存使用者的唯一標識，這裡使用的是 user.UserName（使用者名稱）。
+                //通常用來儲存使用者的唯一標識，這裡使用的是 user.Id
                 //JwtRegisteredClaimNames.Jti 是 JWT 的標準聲明，表示「JWT ID」，用來確保每個 Token 都有唯一的標識符。
                 //Guid.NewGuid().ToString() 生成一個全球唯一的識別碼（GUID）並轉為字串，作為 Token 的唯一 ID。
                 authClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));

@@ -53,9 +53,18 @@ namespace WebApiWithRoleAuthentication.Controllers
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+
+            if (userId == null)
+            {
+                return NotFound("使用者id不存在在");
+            }
             // 2 使用userid取得購物車
             var shoppingCart = await _touristRouteRepository
                 .GetShoppingCartByUserId(userId);
+            if (shoppingCart == null)
+            {
+                return NotFound($"用戶 {userId} 的購物車不存在");
+            }
 
             // 3 創建lineItem
             var touristRoute = await _touristRouteRepository
@@ -76,8 +85,8 @@ namespace WebApiWithRoleAuthentication.Controllers
             // 4 添加lineitem，並保存資料庫
             await _touristRouteRepository.AddShoppingCartItem(lineItem);
             await _touristRouteRepository.SaveAsync();
-
-            return Ok(_mapper.Map<ShoppingCartDto>(shoppingCart));
+            Console.WriteLine($"盛建雄ShoppingCart: Id={shoppingCart?.Id}, UserId={shoppingCart?.UserId} ");
+            return Ok(shoppingCart);
         }
 
         [HttpDelete("items/{itemId}")]
