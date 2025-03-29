@@ -30,7 +30,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         }
 
         [HttpGet]
-        // [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetShoppingCart()
         {
             // 1 取得當前用户
@@ -44,7 +44,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         }
 
         [HttpPost("items")]
-        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> AddShoppingCartItem(
         [FromBody] AddShoppingCartItemDto addShoppingCartItemDto
 )
@@ -90,7 +90,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         }
 
         [HttpDelete("items/{itemId}")]
-        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> DeleteShoppingCartItem([FromRoute] int itemId)
         {
             // 1 取lineitem資料
@@ -108,7 +108,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         }
 
         [HttpDelete("items/({itemIDs})")]
-        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> RemoveShoppingCartItems(
         [ModelBinder(BinderType = typeof(ArrayModelBinder))]
          [FromRoute] IEnumerable<int> itemIDs
@@ -123,7 +123,7 @@ namespace WebApiWithRoleAuthentication.Controllers
             return NoContent();
         }
 
-        [HttpPost("checkout")]
+        [HttpPost("checkout")]//購物車商品加入訂單
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Checkout()
         {
@@ -131,9 +131,22 @@ namespace WebApiWithRoleAuthentication.Controllers
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if (userId == null)
+            {
+                return NotFound("使用者id不存在在");
+            }
             // 2 使用userid取得購物車
             var shoppingCart = await _touristRouteRepository.GetShoppingCartByUserId(userId);
 
+            if (shoppingCart == null)
+            {
+                return NotFound($"用戶 {userId} 的購物車不存在");
+            }
+
+            if (shoppingCart.ShoppingCartItems == null)
+            {
+                return NotFound($"用戶 {shoppingCart.ShoppingCartItems} 的購物車item不存在");
+            }
             // 3 創建訂單
             var order = new Order()
             {
@@ -143,17 +156,15 @@ namespace WebApiWithRoleAuthentication.Controllers
                 OrderItems = shoppingCart?.ShoppingCartItems, // 如果 shoppingCart 為空，OrderItems 會是 null
                 CreateDateUTC = DateTime.UtcNow,
             };
-
-            if (shoppingCart != null)
-            {
-                shoppingCart.ShoppingCartItems = null;
-            }
-
             // 4 保存資料
             await _touristRouteRepository.AddOrderAsync(order);
+            if (shoppingCart != null)
+            {
+                shoppingCart.ShoppingCartItems = null;//清空購物車
+            }
             await _touristRouteRepository.SaveAsync();
 
-            // 5 return
+
             return Ok(_mapper.Map<OrderDto>(order));
         }
 

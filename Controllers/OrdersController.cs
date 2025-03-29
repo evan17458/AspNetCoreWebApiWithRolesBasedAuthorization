@@ -38,7 +38,7 @@ namespace WebApiWithRoleAuthentication.Controllers
             var userId = _httpContextAccessor
                 .HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // 2. 使用用户id来取得訂單歷歷史記錄
+            // 2. 使用用户id來取得訂單歷史記錄
 
             var orders = await _touristRouteRepository.GetOrdersByUserId(userId ?? string.Empty);
 
@@ -72,14 +72,14 @@ namespace WebApiWithRoleAuthentication.Controllers
             order?.PaymentProcessing();
             await _touristRouteRepository.SaveAsync();
 
-            // 3. 向第三方提交支付请求
+            // 3. 向第三方提交支付請求
             var httpClient = _httpClientFactory.CreateClient();
             string url = @"https://localhost:3001/api/FakeVanderPaymentProcess?orderNumber={0}&returnFault={1}";
             var response = await httpClient.PostAsync(
                 string.Format(url, order?.Id, false)
                 , null);
 
-            // 4. 提取支付结果，以及支付信息
+            // 4. 提取支付結果以及支付信息
             bool isApproved = false;
             string transactionMetadata = "";
             if (response.IsSuccessStatusCode)
