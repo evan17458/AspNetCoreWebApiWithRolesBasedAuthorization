@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebApiWithRoleAuthentication.Data;
+using WebApiWithRoleAuthentication.Helper;
 using WebApiWithRoleAuthentication.Models;
 
 namespace WebApiWithRoleAuthentication.Services
@@ -21,14 +22,13 @@ namespace WebApiWithRoleAuthentication.Services
         {
             return _context.TouristRoutes.Any(t => t.Id == touristRouteId);
         }
-        public async Task<IEnumerable<TouristRoute?>> GetTouristRoutesAsync(
-            string? keyword,
-            string? ratingOperator,
-            int? ratingValue,
-            int pageSize,
-            int pageNumber,
-            string? orderBy
-        )
+        public async Task<PaginationList<TouristRoute>> GetTouristRoutesAsync(
+        string? keyword,
+        string? ratingOperator,
+        int? ratingValue,
+        int pageSize,
+        int pageNumber
+         )
         {
             IQueryable<TouristRoute> result = _context
                 .TouristRoutes
@@ -47,28 +47,15 @@ namespace WebApiWithRoleAuthentication.Services
                     _ => result.Where(t => t.Rating == ratingValue),
                 };
             }
+            // if (!string.IsNullOrWhiteSpace(orderBy))
+            // {
+            //     if (orderBy.ToLowerInvariant() == "originalprice")
+            //     {
+            //         result = result.OrderBy(t => t.OriginalPrice);
+            //     }
 
-
-            if (!string.IsNullOrWhiteSpace(orderBy))
-            {
-                if (orderBy.ToLowerInvariant() == "originalprice")
-                {
-                    result = result.OrderBy(t => t.OriginalPrice);
-                }
-
-                //result.ApplySort(orderBy, _mappingDictionary);
-            }
-
-            // pagination
-            // skip
-            var skip = (pageNumber - 1) * pageSize;
-            result = result.Skip(skip);
-            // 以pagesize為標準顯示一定量的資料
-            result = result.Take(pageSize);
-            // include vs join
-
-
-            return await result.ToListAsync();
+            // }
+            return await PaginationList<TouristRoute>.CreateAsync(pageNumber, pageSize, result);
         }
 
         public async Task<bool> TouristRouteExistsAsync(Guid touristRouteId)
