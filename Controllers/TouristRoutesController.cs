@@ -5,6 +5,10 @@ using WebApiWithRoleAuthentication.Dtos;
 using WebApiWithRoleAuthentication.ResourceParameters;
 using WebApiWithRoleAuthentication.Models;
 using Microsoft.AspNetCore.Authorization;
+using WebApiWithRoleAuthentication.Helper;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Newtonsoft.Json;
 namespace WebApiWithRoleAuthentication.Controllers
 {
     [Route("api/[controller]")]
@@ -13,16 +17,58 @@ namespace WebApiWithRoleAuthentication.Controllers
     {
         private ITouristRouteRepository _touristRouteRepository;
         private readonly IMapper _mapper;
+        private readonly IUrlHelper _urlHelper = default!;
         public TouristRoutesController(
             ITouristRouteRepository touristRouteRepository,
-            IMapper mapper
+            IMapper mapper,
+             IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccessor
         )
         {
             _touristRouteRepository = touristRouteRepository;
             _mapper = mapper;
+            _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext!);
+        }
+        private string GenerateTouristRouteResourceURL(
+        TouristRouteResourceParamaters paramaters,
+        PaginationResourceParamaters paramaters2,
+        ResourceUriType type
+)
+        {
+            var link = type switch
+            {
+                ResourceUriType.PreviousPage => _urlHelper.Link("GetTouristRoutes", new
+                {
+                    keyword = paramaters.Keyword,
+                    rating = paramaters.Rating,
+                    pageNumber = paramaters2.PageNumber - 1,
+                    pageSize = paramaters2.PageSize
+                }),
+                ResourceUriType.NextPage => _urlHelper.Link("GetTouristRoutes", new
+                {
+                    keyword = paramaters.Keyword,
+                    rating = paramaters.Rating,
+                    pageNumber = paramaters2.PageNumber + 1,
+                    pageSize = paramaters2.PageSize
+                }),
+                _ => _urlHelper.Link("GetTouristRoutes", new
+                {
+                    keyword = paramaters.Keyword,
+                    rating = paramaters.Rating,
+                    pageNumber = paramaters2.PageNumber,
+                    pageSize = paramaters2.PageSize
+                })
+            };
+
+            if (link == null)
+            {
+                throw new InvalidOperationException("產生 URL 失敗，請確認 Route 名稱是否正確。");
+            }
+
+            return link;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetTouristRoutes")]
         //[Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GerTouristRoutes(
             [FromQuery] TouristRouteResourceParamaters paramaters,
@@ -38,6 +84,29 @@ namespace WebApiWithRoleAuthentication.Controllers
                 return NotFound("没有旅游路線");
             }
             var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
+
+            var previousPageLink = touristRoutesFromRepo.HasPrevious
+              ? GenerateTouristRouteResourceURL(
+             paramaters, paramaters2, ResourceUriType.PreviousPage)
+                 : null;
+
+            var nextPageLink = touristRoutesFromRepo.HasNext
+                ? GenerateTouristRouteResourceURL(
+                    paramaters, paramaters2, ResourceUriType.NextPage)
+                : null;
+
+            // x-pagination
+            var paginationMetadata = new
+            {
+                previousPageLink,
+                nextPageLink,
+                totalCount = touristRoutesFromRepo.TotalCount,
+                pageSize = touristRoutesFromRepo.PageSize,
+                currentPage = touristRoutesFromRepo.CurrentPage,
+                totalPages = touristRoutesFromRepo.TotalPages
+            };
+
+            Response.Headers.Append("x-pagination", JsonConvert.SerializeObject(paginationMetadata));
             return Ok(touristRoutesDto);
         }
 

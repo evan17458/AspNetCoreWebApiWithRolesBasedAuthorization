@@ -8,7 +8,7 @@ using System.Text;
 using WebApiWithRoleAuthentication.Data;
 using WebApiWithRoleAuthentication.Models;
 using WebApiWithRoleAuthentication.Services;
-
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // 配置 Serilog
@@ -22,7 +22,8 @@ builder.Host.UseSerilog((context, configuration) =>
 
 });
 
-
+builder.Services.AddHttpContextAccessor();//在 Service 中使用 HttpContext，取得登入者資訊、請求資料等
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();//要產生連結（像是 UrlHelper.Link()）時，取得 ActionContext
 builder.Services.AddControllers();//負責處理 Web API 的核心邏輯，即路由請求到控制器並產生回應。
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();//負責提供 API 的描述，以便於文件和測試。
