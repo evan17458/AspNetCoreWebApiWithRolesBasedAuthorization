@@ -7,7 +7,9 @@ namespace WebApiWithRoleAuthentication.ResourceParameters
         public string? RatingOperator { get; set; }
         public int? RatingValue { get; set; }
         private string? _rating;
-        public string? Rating
+        public string? Rating;
+        public string? orderBy // ⬅️ 新增排序參數
+
         {
             get { return _rating; }
             set

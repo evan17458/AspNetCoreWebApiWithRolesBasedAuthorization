@@ -77,7 +77,8 @@ namespace WebApiWithRoleAuthentication.Controllers
         {
             var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(paramaters.Keyword, paramaters.RatingOperator, paramaters.RatingValue,
                     paramaters2.PageSize,
-                    paramaters2.PageNumber
+                    paramaters2.PageNumber,
+                    paramaters.orderBy
                    );
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
