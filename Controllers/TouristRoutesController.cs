@@ -25,12 +25,13 @@ namespace WebApiWithRoleAuthentication.Controllers
         [HttpGet]
         //[Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GerTouristRoutes(
-            [FromQuery] TouristRouteResourceParamaters paramaters
+            [FromQuery] TouristRouteResourceParamaters paramaters,
+            [FromQuery] PaginationResourceParamaters paramaters2
         )
         {
             var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(paramaters.Keyword, paramaters.RatingOperator, paramaters.RatingValue,
-                    paramaters.PageSize,
-                    paramaters.PageNumber
+                    paramaters2.PageSize,
+                    paramaters2.PageNumber
                    );
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {

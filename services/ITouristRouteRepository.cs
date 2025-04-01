@@ -30,7 +30,8 @@ namespace WebApiWithRoleAuthentication.Services
         void DeleteShoppingCartItems(IEnumerable<LineItem> lineItems);
         Task AddOrderAsync(Order order);
 
-        Task<IEnumerable<Order>> GetOrdersByUserId(string userId);
+        // Task<IEnumerable<Order>> GetOrdersByUserId(string userId);
+        Task<PaginationList<Order>> GetOrdersByUserId(string userId, int pageSize, int pageNumber);
         Task<Order?> GetOrderById(Guid orderId);
         Task<bool> SaveAsync();
     }

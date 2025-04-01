@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WebApiWithRoleAuthentication.ResourceParameters;
 namespace WebApiWithRoleAuthentication.Controllers
 {
     [ApiController]
@@ -32,7 +33,7 @@ namespace WebApiWithRoleAuthentication.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetOrders()
+        public async Task<IActionResult> GetOrders([FromQuery] PaginationResourceParamaters paramaters)
         {
             // 1. 取得當前用户
             var userId = _httpContextAccessor
@@ -40,7 +41,7 @@ namespace WebApiWithRoleAuthentication.Controllers
 
             // 2. 使用用户id來取得訂單歷史記錄
 
-            var orders = await _touristRouteRepository.GetOrdersByUserId(userId ?? string.Empty);
+            var orders = await _touristRouteRepository.GetOrdersByUserId(userId ?? string.Empty, paramaters.PageSize, paramaters.PageNumber);
 
             return Ok(_mapper.Map<IEnumerable<OrderDto>>(orders));
         }
