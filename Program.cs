@@ -50,6 +50,8 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
+    // 加入自訂的 DocumentFilter
+    c.DocumentFilter<CustomSwaggerDocumentFilter>();
 });
 
 builder.Services.AddScoped<ITouristRouteRepository, TouristRouteRepository>();
