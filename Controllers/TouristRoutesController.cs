@@ -9,6 +9,7 @@ using WebApiWithRoleAuthentication.Helper;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.JsonPatch;
 namespace WebApiWithRoleAuthentication.Controllers
 {
     [Route("api/[controller]")]
@@ -156,6 +157,32 @@ namespace WebApiWithRoleAuthentication.Controllers
 
             return NoContent();
         }
+        [HttpPatch("{touristRouteId}")]
+        //  [Authorize(AuthenticationSchemes = "Bearer")]
+        // [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PartiallyUpdateTouristRoute(
+        [FromRoute] Guid touristRouteId,
+        [FromBody] JsonPatchDocument<TouristRouteForUpdateDto> patchDocument
+)
+        {
+            if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
+            {
+                return NotFound("旅游路线找不到");
+            }
+
+            var touristRouteFromRepo = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
+            var touristRouteToPatch = _mapper.Map<TouristRouteForUpdateDto>(touristRouteFromRepo);
+            patchDocument.ApplyTo(touristRouteToPatch);
+            if (!TryValidateModel(touristRouteToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+            _mapper.Map(touristRouteToPatch, touristRouteFromRepo);
+            await _touristRouteRepository.SaveAsync();
+
+            return NoContent();
+        }
+
         [HttpDelete("{touristRouteId}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         //[Authorize(Roles = "Admin")]

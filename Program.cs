@@ -9,6 +9,8 @@ using WebApiWithRoleAuthentication.Data;
 using WebApiWithRoleAuthentication.Models;
 using WebApiWithRoleAuthentication.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Newtonsoft.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 配置 Serilog
@@ -24,7 +26,22 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddHttpContextAccessor();//在 Service 中使用 HttpContext，取得登入者資訊、請求資料等
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();//要產生連結（像是 UrlHelper.Link()）時，取得 ActionContext
-builder.Services.AddControllers();//負責處理 Web API 的核心邏輯，即路由請求到控制器並產生回應。
+builder.Services.AddControllers(setupAction =>
+{
+    setupAction.ReturnHttpNotAcceptable = true;//若用戶端請求的 Accept 標頭指定了伺服器無法處理或不支援的媒體類型
+    // （例如：application/xml 而專案並未加入 XML 支援），則伺服器會直接回傳 406 Not Acceptable，表示無法滿足該請求的格式需求。
+})
+.AddNewtonsoftJson(setupAction =>
+{
+    // 這邊就是設定 Newtonsoft.Json 的一些序列化參數,表示在序列化成 JSON 時，物件的屬性名稱會變成 小駝峰命名（camelCase）。
+    setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+});
+;//負責處理 Web API 的核心邏輯，即路由請求到控制器並產生回應。
+
+//雖然新的專案預設都使用 System.Text.Json，但還是有不少情境需要或習慣使用 Newtonsoft.Json
+//Newtonsoft.Json 支援更多進階功能與屬性（像是 JsonConverter、ReferenceLoopHandling、NullValueHandling 等）
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();//負責提供 API 的描述，以便於文件和測試。
 builder.Services.AddSwaggerGen(c =>

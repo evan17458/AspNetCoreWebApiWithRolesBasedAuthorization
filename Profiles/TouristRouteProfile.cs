@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using WebApiWithRoleAuthentication.Dtos;
 using WebApiWithRoleAuthentication.Models;
@@ -32,6 +31,7 @@ namespace WebApiWithRoleAuthentication.Profiles
                 opt => opt.MapFrom(src => Guid.NewGuid())
             );
             CreateMap<TouristRouteForUpdateDto, TouristRoute>();
+            CreateMap<TouristRoute, TouristRouteForUpdateDto>();
         }
     }
 }
