@@ -136,8 +136,28 @@ namespace WebApiWithRoleAuthentication.Controllers
                 touristRouteToReture
             );
         }
+        [HttpPut("{touristRouteId}")]
+
+        public async Task<IActionResult> UpdateTouristRoute(
+       [FromRoute] Guid touristRouteId,
+        [FromBody] TouristRouteForUpdateDto touristRouteForUpdateDto
+)
+        {
+            if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
+            {
+                return NotFound("旅游路线找不到");
+            }
+
+            var touristRouteFromRepo = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
+
+            _mapper.Map(touristRouteForUpdateDto, touristRouteFromRepo);
+
+            await _touristRouteRepository.SaveAsync();
+
+            return NoContent();
+        }
         [HttpDelete("{touristRouteId}")]
-        // [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTouristRoute([FromRoute] Guid touristRouteId)
         {

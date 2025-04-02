@@ -30,7 +30,8 @@ namespace WebApiWithRoleAuthentication.Profiles
                .ForMember(
                 dest => dest.Id,
                 opt => opt.MapFrom(src => Guid.NewGuid())
-);
+            );
+            CreateMap<TouristRouteForUpdateDto, TouristRoute>();
         }
     }
 }
