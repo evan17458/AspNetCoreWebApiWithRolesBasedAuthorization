@@ -1,10 +1,14 @@
 
 
 using System.ComponentModel.DataAnnotations;
+using WebApiWithRoleAuthentication.ValidationAttributes;
 
 namespace WebApiWithRoleAuthentication.Dtos
 {
-    public class TouristRouteForCreationDto : IValidatableObject
+
+    [TitleMustBeDifferentFromDescriptionAttribute("Title", "Description")]
+    public class TouristRouteForCreationDto //: IValidatableObject
+
     {
         [Required(ErrorMessage = "title 不可為空")]
         [MaxLength(100)]
@@ -28,16 +32,16 @@ namespace WebApiWithRoleAuthentication.Dtos
         public ICollection<TouristRoutePictureForCreationDto> TouristRoutePictures { get; set; }
         = new List<TouristRoutePictureForCreationDto>();
 
-        public IEnumerable<ValidationResult> Validate(
-           ValidationContext validationContext)
-        {
-            if (Title == Description)
-            {
-                yield return new ValidationResult(
-                    "路線名稱必须和路線描述不同",
-                    new[] { "TouristRouteForCreationDto" }
-                );
-            }
-        }
+        // public IEnumerable<ValidationResult> Validate(
+        //    ValidationContext validationContext)
+        // {
+        //     if (Title == Description)
+        //     {
+        //         yield return new ValidationResult(
+        //             "路線名稱必须和路線描述不同",
+        //             new[] { "TouristRouteForCreationDto" }
+        //         );
+        //     }
+        // }
     }
 }
