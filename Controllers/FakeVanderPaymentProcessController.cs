@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApiWithRoleAuthentication.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]//不出現在 Swagger
     [ApiController]
     [Route("api/[controller]")]
     public class FakeVanderPaymentProcessController : ControllerBase
