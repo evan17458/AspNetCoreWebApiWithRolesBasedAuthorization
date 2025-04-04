@@ -18,9 +18,9 @@ namespace WebApiWithRoleAuthentication.Dtos
         public string? Fees { get; set; }
         public string? Notes { get; set; }
         public double? Rating { get; set; }
-        public TravelDays TravelDays { get; set; } = TravelDays.One;
-        public TripType TripType { get; set; } = TripType.HotelAndAttractions;
-        public DepartureCity DepartureCity { get; set; } = DepartureCity.Beijing;
+        public string TravelDays { get; set; } = string.Empty;
+        public string TripType { get; set; } = string.Empty;
+        public string DepartureCity { get; set; } = string.Empty;
         public ICollection<TouristRoutePictureDto>? TouristRoutePictures { get; set; }
     }
 }
