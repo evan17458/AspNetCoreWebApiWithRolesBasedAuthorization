@@ -19,6 +19,7 @@ namespace WebApiWithRoleAuthentication.Services
 
         bool TouristRouteExists(Guid touristRouteId);
         void DeleteTouristRoute(TouristRoute touristRoute);
+        void DeleteTouristRoutePicture(TouristRoutePicture picture);
         Task<ShoppingCart?> GetShoppingCartByUserId(string? userId);
         Task CreateShoppingCart(ShoppingCart shoppingCart);
 

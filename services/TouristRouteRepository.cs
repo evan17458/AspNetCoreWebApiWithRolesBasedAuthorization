@@ -117,6 +117,11 @@ namespace WebApiWithRoleAuthentication.Services
         {
             _context.TouristRoutes.Remove(touristRoute);
         }
+        public void DeleteTouristRoutePicture(TouristRoutePicture picture)
+        {
+            _context.TouristRoutePictures.Remove(picture);
+        }
+
         public async Task<ShoppingCart?> GetShoppingCartByUserId(string? userId)
         {
             if (string.IsNullOrEmpty(userId))

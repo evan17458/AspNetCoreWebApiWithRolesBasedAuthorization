@@ -3,6 +3,7 @@ using WebApiWithRoleAuthentication.Dtos;
 using WebApiWithRoleAuthentication.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebApiWithRoleAuthentication.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WebApiWithRoleAuthentication.Controllers
@@ -84,5 +85,40 @@ namespace WebApiWithRoleAuthentication.Controllers
                 pictureToReturn
             );
         }
+
+        [HttpDelete("{pictureId}")]
+        // [Authorize(AuthenticationSchemes = "Bearer")]
+        // [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeletePicture(
+       [FromRoute] Guid touristRouteId,
+       [FromRoute] int pictureId
+       )
+        {
+            if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
+            {
+                return NotFound("旅遊路線不存在");
+            }
+
+            var picture = await _touristRouteRepository.GetPictureAsync(pictureId);
+
+            if (picture != null)
+            {
+
+                _touristRouteRepository.DeleteTouristRoutePicture(picture);
+
+            }
+            else
+            {
+                return NotFound("該旅遊路線的照片不存在");
+            }
+
+            await _touristRouteRepository.SaveAsync();
+
+            return NoContent();
+        }
+
+
+
+
     }
 }
