@@ -1,10 +1,10 @@
 
 
-namespace WebApiWithRoleAuthentication.Models
+namespace WebApiWithRoleAuthentication.Enums
 {
     public enum TripType
     {
-        HotelAndAttractions, //酒店+景点
+        HotelAndAttractions, //酒店+景點
         Group, //跟團游
         PrivateGroup, //私人團
         BackPackTour, //自由行

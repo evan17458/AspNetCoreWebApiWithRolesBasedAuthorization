@@ -1,3 +1,4 @@
+using WebApiWithRoleAuthentication.Enums;
 
 namespace WebApiWithRoleAuthentication.Dtos
 {
@@ -17,9 +18,9 @@ namespace WebApiWithRoleAuthentication.Dtos
         public string? Fees { get; set; }
         public string? Notes { get; set; }
         public double? Rating { get; set; }
-        public string? TravelDays { get; set; }
-        public string? TripType { get; set; }
-        public string? DepartureCity { get; set; }
+        public TravelDays TravelDays { get; set; } = TravelDays.One;
+        public TripType TripType { get; set; } = TripType.HotelAndAttractions;
+        public DepartureCity DepartureCity { get; set; } = DepartureCity.Beijing;
         public ICollection<TouristRoutePictureDto>? TouristRoutePictures { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 
 
-namespace WebApiWithRoleAuthentication.Models
+namespace WebApiWithRoleAuthentication.Enums
 {
     public enum DepartureCity
     {
