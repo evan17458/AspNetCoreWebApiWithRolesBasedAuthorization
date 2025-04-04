@@ -140,18 +140,20 @@ namespace WebApiWithRoleAuthentication.Controllers
         [HttpPut("{touristRouteId}")]
 
         public async Task<IActionResult> UpdateTouristRoute(
-       [FromRoute] Guid touristRouteId,
+        [FromRoute] Guid touristRouteId,
         [FromBody] TouristRouteForUpdateDto touristRouteForUpdateDto
 )
         {
             if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
             {
-                return NotFound("旅游路线找不到");
+                return NotFound("旅游路線找不到");
             }
 
             var touristRouteFromRepo = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
 
             _mapper.Map(touristRouteForUpdateDto, touristRouteFromRepo);
+
+            touristRouteFromRepo!.UpdateTime = DateTime.UtcNow;
 
             await _touristRouteRepository.SaveAsync();
 

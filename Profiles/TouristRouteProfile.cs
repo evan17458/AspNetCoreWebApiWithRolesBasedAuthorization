@@ -1,5 +1,6 @@
 using AutoMapper;
 using WebApiWithRoleAuthentication.Dtos;
+using WebApiWithRoleAuthentication.Enums;
 using WebApiWithRoleAuthentication.Models;
 
 namespace WebApiWithRoleAuthentication.Profiles
@@ -30,8 +31,24 @@ namespace WebApiWithRoleAuthentication.Profiles
                 dest => dest.Id,
                 opt => opt.MapFrom(src => Guid.NewGuid())
             );
-            CreateMap<TouristRouteForUpdateDto, TouristRoute>();
+            CreateMap<TouristRouteForUpdateDto, TouristRoute>()
+            .ForMember(dest => dest.TravelDays,
+               opt => opt.MapFrom(src => Enum.Parse<TravelDays>(src.TravelDays!, true)))
+             .ForMember(dest => dest.TripType,
+               opt => opt.MapFrom(src => Enum.Parse<TripType>(src.TripType!, true)))
+             .ForMember(dest => dest.DepartureCity,
+               opt => opt.MapFrom(src => Enum.Parse<DepartureCity>(src.DepartureCity!, true)));
+
+
             CreateMap<TouristRoute, TouristRouteForUpdateDto>();
+
+            CreateMap<TouristRouteForCreationDto, TouristRoute>()
+             .ForMember(dest => dest.TravelDays,
+               opt => opt.MapFrom(src => Enum.Parse<TravelDays>(src.TravelDays!, true)))
+             .ForMember(dest => dest.TripType,
+               opt => opt.MapFrom(src => Enum.Parse<TripType>(src.TripType!, true)))
+             .ForMember(dest => dest.DepartureCity,
+               opt => opt.MapFrom(src => Enum.Parse<DepartureCity>(src.DepartureCity!, true)));
         }
     }
 }
