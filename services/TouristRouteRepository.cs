@@ -117,6 +117,11 @@ namespace WebApiWithRoleAuthentication.Services
         {
             _context.TouristRoutes.Remove(touristRoute);
         }
+        public void DeleteTouristRoutes(IEnumerable<TouristRoute> touristRoutes)
+        {
+            _context.TouristRoutes.RemoveRange(touristRoutes);
+        }
+
         public void DeleteTouristRoutePicture(TouristRoutePicture picture)
         {
             _context.TouristRoutePictures.Remove(picture);

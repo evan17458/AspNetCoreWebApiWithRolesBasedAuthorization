@@ -203,8 +203,26 @@ namespace WebApiWithRoleAuthentication.Controllers
                 await _touristRouteRepository.SaveAsync();
             }
 
-
             return NoContent();
         }
+
+        // [HttpDelete("({touristIDs})")]
+        // // [Authorize(AuthenticationSchemes = "Bearer")]
+        // // [Authorize(Roles = "Admin")]
+        // public async Task<IActionResult> DeleteByIDs(
+        //   [ModelBinder(BinderType = typeof(ArrayModelBinder))][FromRoute] IEnumerable<Guid> touristIDs)
+        // {
+        //     if (touristIDs == null)
+        //     {
+        //         return BadRequest();
+        //     }
+
+        //     var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesByIDListAsync(touristIDs);
+        //     _touristRouteRepository.DeleteTouristRoutes(touristRoutesFromRepo);
+        //     await _touristRouteRepository.SaveAsync();
+
+        //     return NoContent();
+        // }
+
     }
 }
