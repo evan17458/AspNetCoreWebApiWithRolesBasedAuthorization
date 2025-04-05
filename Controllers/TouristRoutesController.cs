@@ -83,7 +83,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                    );
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
-                return NotFound("没有旅游路線");
+                return NotFound("没有旅遊路線");
             }
             var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
 
@@ -128,14 +128,18 @@ namespace WebApiWithRoleAuthentication.Controllers
         public async Task<IActionResult> CreateTouristRoute([FromBody] TouristRouteForCreationDto touristRouteForCreationDto)
         {
             var touristRouteModel = _mapper.Map<TouristRoute>(touristRouteForCreationDto);
+            //將傳進來的 DTO 轉成真正要儲存到資料庫的實體模型 TouristRoute
             _touristRouteRepository.AddTouristRoute(touristRouteModel);
             await _touristRouteRepository.SaveAsync();
             var touristRouteToReture = _mapper.Map<TouristRouteDto>(touristRouteModel);
+            //資料庫中的模型轉成要回傳給前端的 DTO，用來做 API 回應。
             return CreatedAtRoute(
-                "GetTouristRouteById",
+                "GetTouristRouteById",// 是一個已存在的 GET API 的 route 名稱
                 new { touristRouteId = touristRouteToReture.Id },
                 touristRouteToReture
             );
+            //CreatedAtRoute 表示建立成功後，會在 response header 中包含 Location，指向這筆新資料的 API 路徑
+            //例如：/api/touristRoutes/{id}）
         }
         [HttpPut("{touristRouteId}")]
 
@@ -169,7 +173,7 @@ namespace WebApiWithRoleAuthentication.Controllers
         {
             if (!await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId))
             {
-                return NotFound("旅游路线找不到");
+                return NotFound("旅游路線找不到");
             }
 
             var touristRouteFromRepo = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
