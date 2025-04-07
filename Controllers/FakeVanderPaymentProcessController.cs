@@ -41,7 +41,7 @@ namespace WebApiWithRoleAuthentication.Controllers
                 id = Guid.NewGuid(),
                 created = DateTime.UtcNow,
                 approved = true,
-                message = "Reject",
+                message = "Success",
                 payment_metohd = "信用卡支付",
                 order_number = orderNumber,
                 card = new

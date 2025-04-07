@@ -23,7 +23,7 @@ builder.Host.UseSerilog((context, configuration) =>
         .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day); // 輸出到檔案，按天分割
 
 });
-
+builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();//在 Service 中使用 HttpContext，取得登入者資訊、請求資料等
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();//要產生連結（像是 UrlHelper.Link()）時，取得 ActionContext
 builder.Services.AddControllers(setupAction =>
@@ -35,6 +35,8 @@ builder.Services.AddControllers(setupAction =>
 {
     // 這邊就是設定 Newtonsoft.Json 的一些序列化參數,表示在序列化成 JSON 時，物件的屬性名稱會變成 小駝峰命名（camelCase）。
     setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+    // 忽略物件序列化時的循環參考（防止 self referencing loop）
+    setupAction.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 });
 ;//負責處理 Web API 的核心邏輯，即路由請求到控制器並產生回應。
 

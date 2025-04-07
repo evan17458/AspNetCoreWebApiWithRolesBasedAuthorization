@@ -75,7 +75,7 @@ namespace WebApiWithRoleAuthentication.Controllers
 
             // 3. 向第三方提交支付請求
             var httpClient = _httpClientFactory.CreateClient();
-            string url = @"https://localhost:3001/api/FakeVanderPaymentProcess?orderNumber={0}&returnFault={1}";
+            string url = @"http://localhost:5129/api/FakeVanderPaymentProcess?orderNumber={0}&returnFault={1}";
             var response = await httpClient.PostAsync(
                 string.Format(url, order?.Id, false)
                 , null);
